@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { MessageCircle, ArrowUp, Sparkles, X, PhoneCall } from 'lucide-react';
+import { ArrowUp } from 'lucide-react';
+import { WhatsappIcon } from '@/components/SocialIcons';
 import { getSiteSettings } from '@/lib/storage';
 
 export default function QuickFloatingWidget() {
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const [showTooltip, setShowTooltip] = useState(true);
   const [phone, setPhone] = useState('08116696990');
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export default function QuickFloatingWidget() {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -30,54 +30,52 @@ export default function QuickFloatingWidget() {
   };
 
   const openWhatsApp = () => {
-    const text = encodeURIComponent('Assalamu’alaikum, saya ingin bertanya mengenai pendaftaran siswa baru (SPMB) SD IT Andalas Cendekia.');
-    window.open(`https://wa.me/${phone}?text=${text}`, '_blank');
+    const formattedPhone = phone.startsWith('0') 
+      ? '62' + phone.substring(1) 
+      : phone.startsWith('62') 
+      ? phone 
+      : '62' + phone;
+
+    const message = encodeURIComponent(
+      'Assalamu’alaikum, Halo Admin SD IT Andalas Cendekia, saya ingin mendapatkan informasi lebih lanjut tentang pendaftaran dan program pendidikan.'
+    );
+    window.open(`https://wa.me/${formattedPhone}?text=${message}`, '_blank', 'noopener,noreferrer');
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3 pointer-events-auto">
-      {/* Friendly Tooltip */}
-      {showTooltip && (
-        <div className="bg-emerald-950 text-white p-3.5 rounded-2xl shadow-2xl border border-amber-400/40 max-w-xs text-xs relative animate-fadeIn flex items-center gap-3">
-          <button 
-            onClick={() => setShowTooltip(false)}
-            className="absolute -top-2 -right-2 bg-slate-800 text-white rounded-full p-0.5 hover:bg-slate-700"
-          >
-            <X size={12} />
-          </button>
-          <div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center shrink-0">
-            <Sparkles size={16} className="text-amber-300 animate-spin" style={{ animationDuration: '4s' }} />
-          </div>
-          <div>
-            <p className="font-extrabold text-amber-300 mb-0.5">Ada Pertanyaan?</p>
-            <p className="text-[11px] text-emerald-200">Chat CS Pendaftaran & Info Sekolah sekarang!</p>
-          </div>
-        </div>
-      )}
-
-      {/* Main WhatsApp Button */}
-      <button
-        onClick={openWhatsApp}
-        className="group bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white p-3.5 rounded-full shadow-2xl shadow-emerald-500/40 hover:scale-110 transition-all duration-300 flex items-center gap-2.5 font-extrabold text-xs ring-4 ring-white/80"
-        title="Chat WhatsApp SD IT Andalas Cendekia"
-      >
-        <div className="w-8 h-8 rounded-full bg-white text-emerald-600 flex items-center justify-center shadow-inner">
-          <MessageCircle size={20} className="fill-emerald-600" />
-        </div>
-        <span className="hidden sm:inline pr-1 tracking-wide">Tanya SPMB</span>
-        <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping"></span>
-      </button>
-
-      {/* Scroll to top button */}
+    <div className="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end gap-3 pointer-events-auto select-none">
+      {/* Scroll to Top Button */}
       {showScrollTop && (
         <button
           onClick={scrollToTop}
-          className="bg-slate-900/90 hover:bg-slate-900 text-white p-3 rounded-full shadow-lg border border-slate-700 hover:scale-110 transition-all duration-300 backdrop-blur-md"
+          className="w-10 h-10 rounded-full bg-slate-900/90 hover:bg-slate-900 text-white shadow-lg border border-slate-700/60 hover:scale-110 active:scale-95 transition-all duration-300 backdrop-blur-md flex items-center justify-center focus:outline-none"
           title="Kembali ke atas"
+          aria-label="Kembali ke atas"
         >
           <ArrowUp size={18} />
         </button>
       )}
+
+      {/* Floating WhatsApp Button (Model qlwapp ala tiaraaksara.sch.id) */}
+      <button
+        onClick={openWhatsApp}
+        className="group relative flex items-center gap-3 bg-[#25d366] hover:bg-[#20ba59] text-white py-3 px-4 sm:py-3.5 sm:px-5 rounded-full shadow-[0_8px_30px_rgb(37,211,102,0.4)] hover:shadow-[0_12px_35px_rgb(37,211,102,0.6)] transform hover:scale-105 active:scale-95 transition-all duration-300 font-sans cursor-pointer focus:outline-none ring-2 ring-white/30"
+        title="Chat WhatsApp SD IT Andalas Cendekia"
+        aria-label="Yuk mulai percakapan via WhatsApp"
+      >
+        {/* Soft pulse glow ring ala tiaraaksara */}
+        <span className="absolute -inset-1 rounded-full bg-[#25d366]/35 animate-ping pointer-events-none -z-10 opacity-75"></span>
+
+        {/* WhatsApp Icon */}
+        <div className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center text-white shrink-0">
+          <WhatsappIcon className="w-6 h-6 sm:w-7 sm:h-7" />
+        </div>
+
+        {/* Label Text "Yuk mulai percakapan" */}
+        <span className="text-xs sm:text-sm font-bold tracking-tight text-white whitespace-nowrap drop-shadow-sm">
+          Yuk mulai percakapan
+        </span>
+      </button>
     </div>
   );
 }

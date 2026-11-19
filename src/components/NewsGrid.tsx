@@ -69,6 +69,8 @@ export default function NewsGrid() {
                   <img 
                     src={news.imageUrl} 
                     alt={news.title} 
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                   />
                   <span className="absolute top-3 left-3 bg-emerald-600 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow">

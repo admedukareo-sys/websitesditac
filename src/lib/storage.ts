@@ -528,44 +528,55 @@ function initializeStorage() {
     localStorage.setItem(STORAGE_KEYS.SITE_EVENTS, JSON.stringify(defaultEvents));
   }
 
-  if (!localStorage.getItem(STORAGE_KEYS.SITE_SLIDES) || localStorage.getItem('sdit_slides_v3') !== 'true') {
+  if (!localStorage.getItem(STORAGE_KEYS.SITE_SLIDES) || localStorage.getItem('sdit_slides_v4') !== 'true') {
     const defaultSlides: SlideItem[] = [
       {
         id: 1,
-        badge: 'Kurikulum Khas SD IT Andalas Cendekia',
-        title: 'Unggul Berkarakter Al-Qur’an',
-        description: 'Memadukan Kurikulum Kemendikbud, Muatan Lokal, dan Program Unggulan khas (PRISE & Bi-SQ) dengan metode 3HA (HAfalkan, HAyati, HAbituasi).',
-        imageUrl: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1920&q=80',
-        primaryCtaText: 'Daftar SPMB Sekarang',
-        primaryCtaLink: '/spmb',
-        secondaryCtaText: 'Profil Kurikulum Khas',
-        secondaryCtaLink: '/kurikulum',
+        badge: 'Kampus Yayasan',
+        title: 'Gedung dan Halaman Megah Kampus Yayasan',
+        description: 'Arsitektur megah kampus yayasan dengan halaman terbuka yang asri dan luas.',
+        imageUrl: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=2560&q=90',
+        primaryCtaText: '',
+        primaryCtaLink: '',
+        secondaryCtaText: '',
+        secondaryCtaLink: '',
       },
       {
         id: 2,
-        badge: 'Program Rising Star (PRISE)',
-        title: 'Mengembangkan Potensi & Kecerdasan Unik Siswa',
-        description: 'Program Little Star (Kelas 1–3) dan Peminatan 9 Ekstrakurikuler Wajib (Kelas 4–6) berbasis Multiple Intelligences (SLIM EN BIL).',
-        imageUrl: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1920&q=80',
-        primaryCtaText: 'Lihat Program PRISE',
-        primaryCtaLink: '/kurikulum',
-        secondaryCtaText: 'Aktivitas Kesiswaan',
-        secondaryCtaLink: '/kesiswaan',
+        badge: 'Aktivitas Belajar',
+        title: 'Aktivitas Belajar Interaktif Siswa dan Guru',
+        description: 'Aktivitas belajar interaktif, inspiratif, dan kolaboratif antara siswa dan guru di ruang kelas modern.',
+        imageUrl: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=2560&q=90',
+        primaryCtaText: '',
+        primaryCtaLink: '',
+        secondaryCtaText: '',
+        secondaryCtaLink: '',
       },
       {
         id: 3,
-        badge: 'Bina Siswa Qur’ani (Bi-SQ)',
-        title: 'Internalisasi 24 Karakter Al-Qur’an & Polisi Cilik',
-        description: 'Pembentukan kepribadian siswa berkarakter Al-Qur’an melalui 3 fase (Pondasi, Pembentukan, Pematangan) dan penegakan disiplin kader Polisi Cilik.',
-        imageUrl: 'https://images.unsplash.com/photo-1585036156171-384164a8c675?auto=format&fit=crop&w=1920&q=80',
-        primaryCtaText: 'Pelajari Bi-SQ',
-        primaryCtaLink: '/kurikulum',
-        secondaryCtaText: 'Profil Sekolah',
-        secondaryCtaLink: '/profil',
+        badge: 'Perpustakaan & Riset',
+        title: 'Fasilitas Perpustakaan dan Riset Modern',
+        description: 'Fasilitas perpustakaan dan riset modern yang lengkap untuk mendukung literasi serta wawasan global.',
+        imageUrl: 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=2560&q=90',
+        primaryCtaText: '',
+        primaryCtaLink: '',
+        secondaryCtaText: '',
+        secondaryCtaLink: '',
+      },
+      {
+        id: 4,
+        badge: 'Lingkungan Asri',
+        title: 'Arsitektur Lingkungan Sekolah yang Asri dan Representatif',
+        description: 'Arsitektur tata ruang hijau lingkungan sekolah yang asri, sejuk, dan representatif bagi pendidikan anak.',
+        imageUrl: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=2560&q=90',
+        primaryCtaText: '',
+        primaryCtaLink: '',
+        secondaryCtaText: '',
+        secondaryCtaLink: '',
       }
     ];
     localStorage.setItem(STORAGE_KEYS.SITE_SLIDES, JSON.stringify(defaultSlides));
-    localStorage.setItem('sdit_slides_v3', 'true');
+    localStorage.setItem('sdit_slides_v4', 'true');
   }
 
   if (!localStorage.getItem(STORAGE_KEYS.SITE_FACILITIES)) {

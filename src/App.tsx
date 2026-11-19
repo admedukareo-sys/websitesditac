@@ -1,33 +1,45 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense, lazy } from 'react';
 import { Routes, Route, Outlet, useLocation } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import QuickFloatingWidget from '@/components/QuickFloatingWidget';
 import { recordVisit } from '@/lib/visitorTracking';
 
-// Pages
+// Halaman Utama diimpor langsung agar First Contentful Paint (FCP) instan
 import Home from '@/pages/Home';
-import Profil from '@/pages/Profil';
-import Kurikulum from '@/pages/Kurikulum';
-import Kesiswaan from '@/pages/Kesiswaan';
-import Kontak from '@/pages/Kontak';
 
-// SPMB Pages
-import SpmbHome from '@/pages/spmb/SpmbHome';
-import SpmbLogin from '@/pages/spmb/SpmbLogin';
-import SpmbRegister from '@/pages/spmb/SpmbRegister';
-import SpmbDashboard from '@/pages/spmb/SpmbDashboard';
-import SpmbForm from '@/pages/spmb/SpmbForm';
-import SpmbPayment from '@/pages/spmb/SpmbPayment';
+// Lazy loading halaman publik lainnya untuk memangkas ukuran bundle awal
+const Profil = lazy(() => import('@/pages/Profil'));
+const Kurikulum = lazy(() => import('@/pages/Kurikulum'));
+const Kesiswaan = lazy(() => import('@/pages/Kesiswaan'));
+const Kontak = lazy(() => import('@/pages/Kontak'));
 
-// Admin Pages
-import AdminLayout from '@/pages/admin/AdminLayout';
-import AdminDashboard from '@/pages/admin/AdminDashboard';
-import AdminRegistrations from '@/pages/admin/AdminRegistrations';
-import AdminPayments from '@/pages/admin/AdminPayments';
-import AdminVisitorAnalytics from '@/pages/admin/AdminVisitorAnalytics';
-import AdminContent from '@/pages/admin/AdminContent';
+// Lazy loading modul SPMB (hanya dimuat saat pengunjung mengakses SPMB)
+const SpmbHome = lazy(() => import('@/pages/spmb/SpmbHome'));
+const SpmbLogin = lazy(() => import('@/pages/spmb/SpmbLogin'));
+const SpmbRegister = lazy(() => import('@/pages/spmb/SpmbRegister'));
+const SpmbDashboard = lazy(() => import('@/pages/spmb/SpmbDashboard'));
+const SpmbForm = lazy(() => import('@/pages/spmb/SpmbForm'));
+const SpmbPayment = lazy(() => import('@/pages/spmb/SpmbPayment'));
 
-import QuickFloatingWidget from '@/components/QuickFloatingWidget';
+// Lazy loading modul Admin Panel (terpisah total dari bundle umum)
+const AdminLayout = lazy(() => import('@/pages/admin/AdminLayout'));
+const AdminDashboard = lazy(() => import('@/pages/admin/AdminDashboard'));
+const AdminRegistrations = lazy(() => import('@/pages/admin/AdminRegistrations'));
+const AdminPayments = lazy(() => import('@/pages/admin/AdminPayments'));
+const AdminVisitorAnalytics = lazy(() => import('@/pages/admin/AdminVisitorAnalytics'));
+const AdminContent = lazy(() => import('@/pages/admin/AdminContent'));
+
+function PageLoader() {
+  return (
+    <div className="min-h-[60vh] flex items-center justify-center bg-slate-50">
+      <div className="flex flex-col items-center gap-3">
+        <div className="w-9 h-9 border-3 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
+        <span className="text-xs font-semibold text-slate-500">Memuat halaman...</span>
+      </div>
+    </div>
+  );
+}
 
 function VisitorTracker() {
   const location = useLocation();
@@ -44,7 +56,9 @@ function MainLayout() {
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 relative">
       <Navbar />
       <main className="flex-1">
-        <Outlet />
+        <Suspense fallback={<PageLoader />}>
+          <Outlet />
+        </Suspense>
       </main>
       <Footer />
       <QuickFloatingWidget />
@@ -76,7 +90,14 @@ export default function App() {
         </Route>
 
         {/* Admin routes with custom sidebar layout */}
-        <Route path="/admin" element={<AdminLayout />}>
+        <Route 
+          path="/admin" 
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <AdminLayout />
+            </Suspense>
+          }
+        >
           <Route index element={<AdminDashboard />} />
           <Route path="registrations" element={<AdminRegistrations />} />
           <Route path="payments" element={<AdminPayments />} />

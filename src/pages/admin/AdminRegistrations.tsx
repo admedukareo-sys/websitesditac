@@ -78,10 +78,12 @@ export function handleImageError(e: React.SyntheticEvent<HTMLImageElement, Event
   const img = e.currentTarget;
   if (!img.dataset.retried) {
     img.dataset.retried = 'true';
-    const filename = originalUrl.split('/').pop()?.split('?')[0];
-    if (filename && !originalUrl.startsWith('data:') && !originalUrl.startsWith('blob:')) {
-      img.src = `/api/index.php?action=view_file&name=${encodeURIComponent(filename)}`;
-      return;
+    if (originalUrl && !originalUrl.startsWith('data:') && !originalUrl.startsWith('blob:') && !originalUrl.includes('action=view_file')) {
+      const filename = originalUrl.split('/').pop()?.split('?')[0];
+      if (filename && filename !== 'index.php' && (filename.endsWith('.jpg') || filename.endsWith('.jpeg') || filename.endsWith('.png') || filename.endsWith('.webp') || filename.endsWith('.pdf'))) {
+        img.src = `/api/index.php?action=view_file&name=${encodeURIComponent(filename)}`;
+        return;
+      }
     }
   }
   // Jika retry juga gagal atau base64 rusak, sembunyikan gambar agar fallback muncul rapi

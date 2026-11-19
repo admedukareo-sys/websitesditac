@@ -202,8 +202,10 @@ CREATE TABLE IF NOT EXISTS `hero_slides` (
 
 -- Data Seed: hero_slides
 INSERT INTO `hero_slides` (`id`, `badge`, `title`, `description`, `image_url`, `primary_cta_text`, `primary_cta_link`, `secondary_cta_text`, `secondary_cta_link`, `created_at`) VALUES
-(1, 'Penerimaan Siswa Baru 2026/2027 Telah Dibuka', 'Membentuk Generasi Qurani, Cerdas, dan Berprestasi', 'SD IT Andalas Cendekia memadukan kurikulum nasional dan keislaman untuk mencetak pemimpin masa depan yang berakhlak mulia dan berwawasan global.', 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1920&q=80', 'Daftar SPMB Sekarang', '/spmb', 'Pelajari Lebih Lanjut', '/profil', '2026-08-26 00:00:00'),
-(2, 'Program Unggulan Tahfidz Al-Qur\'an', 'Target Hafalan 5-10 Juz Berlandaskan Adab Islami', 'Pendampingan halaqah Al-Qur\'an harian bersama musyrif & musyrifah berpengalaman untuk mencetak alumni penghafal Al-Qur\'an mutqin.', 'https://images.unsplash.com/photo-1585036156171-384164a8c675?auto=format&fit=crop&w=1920&q=80', 'Lihat Kurikulum & Program', '/kurikulum', 'Portal SPMB', '/spmb', '2026-08-26 00:00:00');
+(1, 'Kampus Yayasan', 'Gedung dan Halaman Megah Kampus Yayasan', 'Arsitektur megah gedung yayasan dengan halaman terbuka yang asri dan luas.', 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=2560&q=90', '', '', '', '', '2026-08-26 00:00:00'),
+(2, 'Aktivitas Belajar', 'Aktivitas Belajar Interaktif Siswa dan Guru', 'Aktivitas belajar interaktif, inspiratif, dan kolaboratif antara siswa dan guru di ruang kelas modern.', 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=2560&q=90', '', '', '', '', '2026-08-26 00:00:00'),
+(3, 'Perpustakaan & Riset', 'Fasilitas Perpustakaan dan Riset Modern', 'Fasilitas perpustakaan dan riset modern yang lengkap untuk mendukung literasi serta wawasan global.', 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=2560&q=90', '', '', '', '', '2026-08-26 00:00:00'),
+(4, 'Lingkungan Asri', 'Arsitektur Lingkungan Sekolah yang Asri dan Representatif', 'Arsitektur tata ruang hijau lingkungan sekolah yang asri, sejuk, dan representatif bagi pendidikan anak.', 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=2560&q=90', '', '', '', '', '2026-08-26 00:00:00');
 
 -- --------------------------------------------------------
 -- 6. TABEL: facilities (Sarana & Prasarana Sekolah)
