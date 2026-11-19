@@ -392,7 +392,7 @@ function initializeStorage() {
     localStorage.setItem(STORAGE_KEYS.REGISTRATIONS, JSON.stringify([]));
   }
 
-  if (!localStorage.getItem(STORAGE_KEYS.SITE_SETTINGS) || localStorage.getItem('sdit_settings_v7') !== 'true') {
+  if (!localStorage.getItem(STORAGE_KEYS.SITE_SETTINGS)) {
     const defaultSettings: SiteSettings = {
       schoolName: 'SDIT ANDALAS CENDEKIA',
       tagline: 'Sekolah Generasi Pemimpin Qur’ani',
@@ -416,7 +416,7 @@ function initializeStorage() {
         'Perbaikan Berkelanjutan'
       ],
       address: 'JL. Kampung Baru No.36, RT 00/RW 00, Kel. Sikabau, Kec. Pulau Punjung, Kab. Dharmasraya, Prov. Sumatera Barat 27573',
-      phone: '0812-6655-8123',
+      phone: '0811-6696-990',
       email: 'sditac1@gmail.com',
       website: 'https://sdit.andalascendekia.sch.id',
       npsn: '10310802',
@@ -461,12 +461,20 @@ function initializeStorage() {
     };
     localStorage.setItem(STORAGE_KEYS.SITE_SETTINGS, JSON.stringify(defaultSettings));
     localStorage.setItem('sdit_settings_v8', 'true');
+    localStorage.setItem('sdit_settings_v7', 'true');
   } else {
+    // Flag versi diset agar tidak pernah menimpa konfigurasi yang sudah disimpan user
+    localStorage.setItem('sdit_settings_v8', 'true');
+    localStorage.setItem('sdit_settings_v7', 'true');
     try {
       const rawSettings = localStorage.getItem(STORAGE_KEYS.SITE_SETTINGS);
       if (rawSettings) {
         const parsed = JSON.parse(rawSettings);
         let changed = false;
+        if (!parsed.phone || parsed.phone === '0812-6655-8123') {
+          parsed.phone = '0811-6696-990';
+          changed = true;
+        }
         if (!parsed.bankAccNo || parsed.bankAccNo === '14030101004636' || parsed.bankAccNo === '783101008882539') {
           parsed.bankAccNo = '71050220008996';
           parsed.bankName = 'Bank Nagari';
@@ -1306,7 +1314,7 @@ export function getSiteSettings(): SiteSettings {
       'Perbaikan Berkelanjutan'
     ],
     address: data.address || 'JL. Kampung Baru No.36, RT 00/RW 00, Kel. Sikabau, Kec. Pulau Punjung, Kab. Dharmasraya, Prov. Sumatera Barat 27573',
-    phone: data.phone || '0812-6655-8123',
+    phone: data.phone || '0811-6696-990',
     email: data.email || 'sditac1@gmail.com',
     website: data.website || 'https://sdit.andalascendekia.sch.id',
     npsn: data.npsn || '10310802',
@@ -1374,10 +1382,19 @@ export function extractMapEmbedUrl(input: string): string {
   return trimmed;
 }
 
-export function saveSiteSettings(settings: SiteSettings) {
+export async function saveSiteSettings(settings: SiteSettings) {
   const cleaned = stripSupabaseTag(settings);
   localStorage.setItem(STORAGE_KEYS.SITE_SETTINGS, JSON.stringify(cleaned));
-  api.saveSettings(cleaned);
+  try {
+    const res = await api.saveSettings(cleaned);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('sdit_data_synced'));
+    }
+    return res;
+  } catch (err) {
+    console.warn('[Storage] saveSiteSettings error:', err);
+    return null;
+  }
 }
 
 export function getSiteNews(): NewsItem[] {

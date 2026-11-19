@@ -12,7 +12,7 @@ import {
   getSiteAdvantages, saveSiteAdvantages, AdvantageItem,
   formatGoogleDriveImageUrl
 } from '@/lib/storage';
-import { Save, Plus, Edit2, Trash2, CheckCircle2, Newspaper, Calendar, Settings, Video, Sliders, Building2, MessageSquareQuote, Star, Share2, Award, BookOpen, User, Users, Sparkles, MapPin, Target, Landmark, FileText } from 'lucide-react';
+import { Save, Plus, Edit2, Trash2, CheckCircle2, Newspaper, Calendar, Settings, Video, Sliders, Building2, MessageSquareQuote, Star, Share2, Award, BookOpen, User, Users, Sparkles, MapPin, Target, Landmark, FileText, X } from 'lucide-react';
 import { FacebookIcon, InstagramIcon, YoutubeIcon } from '@/components/SocialIcons';
 
 function ensureUniqueItemIds<T extends { id: number }>(items: T[]): T[] {
@@ -31,6 +31,8 @@ function ensureUniqueItemIds<T extends { id: number }>(items: T[]): T[] {
 export default function AdminContent() {
   const [activeTab, setActiveTab] = useState<'SETTINGS' | 'TEACHERS' | 'CURRICULUM' | 'ACTIVITIES' | 'TESTIMONIALS' | 'FACILITIES' | 'SLIDES' | 'NEWS' | 'EVENTS' | 'ADVANTAGES'>('TEACHERS');
   const [savedNotice, setSavedNotice] = useState<string | null>(null);
+  const [isSavingSettings, setIsSavingSettings] = useState(false);
+  const [isSavedSettingsSuccess, setIsSavedSettingsSuccess] = useState(false);
 
   // Settings State
   const [settings, setSettings] = useState<SiteSettings>({
@@ -263,23 +265,41 @@ export default function AdminContent() {
   };
 
   // Save Settings
-  const handleSaveSettings = (e: React.FormEvent) => {
+  const handleSaveSettings = async (e: React.FormEvent) => {
     e.preventDefault();
-    const misiArray = misiText.split('\n').map((s) => s.trim()).filter(Boolean);
-    const tujuanArray = tujuanText.split('\n').map((s) => s.trim()).filter(Boolean);
-    const extractedMapUrl = extractMapEmbedUrl(settings.mapEmbedUrl || '');
+    setIsSavingSettings(true);
+    setIsSavedSettingsSuccess(false);
 
-    const formattedSettings: SiteSettings = {
-      ...settings,
-      misiList: misiArray.length > 0 ? misiArray : settings.misiList,
-      tujuanList: tujuanArray.length > 0 ? tujuanArray : settings.tujuanList,
-      mapEmbedUrl: extractedMapUrl,
-      videoUrl: formatYouTubeEmbed(settings.videoUrl || ''),
-      principalPhotoUrl: formatGoogleDriveImageUrl(settings.principalPhotoUrl || ''),
-    };
-    saveSiteSettings(formattedSettings);
-    setSettings(formattedSettings);
-    triggerNotice('Profil, Visi, Misi, Tujuan, Sambutan Kepsek, Peta Lokasi & Kontak berhasil diperbarui!');
+    try {
+      const misiArray = misiText.split('\n').map((s) => s.trim()).filter(Boolean);
+      const tujuanArray = tujuanText.split('\n').map((s) => s.trim()).filter(Boolean);
+      const extractedMapUrl = extractMapEmbedUrl(settings.mapEmbedUrl || '');
+
+      const formattedSettings: SiteSettings = {
+        ...settings,
+        misiList: misiArray.length > 0 ? misiArray : settings.misiList,
+        tujuanList: tujuanArray.length > 0 ? tujuanArray : settings.tujuanList,
+        mapEmbedUrl: extractedMapUrl,
+        videoUrl: formatYouTubeEmbed(settings.videoUrl || ''),
+        principalPhotoUrl: formatGoogleDriveImageUrl(settings.principalPhotoUrl || ''),
+      };
+      await saveSiteSettings(formattedSettings);
+      setSettings(formattedSettings);
+
+      // Jeda halus 350ms untuk feedback animasi proses pada tombol
+      await new Promise((resolve) => setTimeout(resolve, 350));
+
+      setIsSavingSettings(false);
+      setIsSavedSettingsSuccess(true);
+      triggerNotice('Data Profil & Visi Sekolah Berhasil Disimpan!');
+
+      setTimeout(() => {
+        setIsSavedSettingsSuccess(false);
+      }, 4000);
+    } catch (err) {
+      setIsSavingSettings(false);
+      triggerNotice('Gagal menyimpan profil & visi sekolah. Silakan coba kembali.');
+    }
   };
 
   // Teachers Handlers
@@ -864,11 +884,26 @@ export default function AdminContent() {
         </p>
       </div>
 
-      {/* Save Notification Toast */}
+      {/* Save Notification Toast (Floating Top-Center Fixed Banner - Selalu Terlihat Saat Scroll) */}
       {savedNotice && (
-        <div className="mb-6 bg-emerald-600 text-white p-4 rounded-2xl shadow-lg flex items-center gap-2 font-bold text-xs animate-fadeIn">
-          <CheckCircle2 size={18} className="text-amber-300 shrink-0" />
-          <span>{savedNotice}</span>
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[9999] max-w-lg w-[92%] sm:w-auto min-w-[340px] bg-emerald-950/95 text-white px-5 py-4 rounded-2xl shadow-2xl border-2 border-emerald-400/80 backdrop-blur-md flex items-center justify-between gap-4 font-bold text-xs sm:text-sm animate-fadeIn">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-emerald-500/25 flex items-center justify-center shrink-0 border border-emerald-400/40 text-emerald-400">
+              <CheckCircle2 size={22} className="text-amber-300 animate-pulse" />
+            </div>
+            <div>
+              <p className="font-extrabold text-amber-300 text-xs sm:text-sm">Konfirmasi Penyimpanan</p>
+              <p className="text-emerald-100 text-[11px] sm:text-xs font-medium mt-0.5">{savedNotice}</p>
+            </div>
+          </div>
+          <button 
+            onClick={() => setSavedNotice(null)} 
+            className="text-white/70 hover:text-white p-1.5 rounded-lg hover:bg-white/10 shrink-0 transition-colors focus:outline-none"
+            title="Tutup pemberitahuan"
+            aria-label="Tutup"
+          >
+            <X size={16} />
+          </button>
         </div>
       )}
 
@@ -1063,16 +1098,38 @@ export default function AdminContent() {
       {/* TAB 1: IDENTITAS, VISI, SAMBUTAN KEPSEK & MEDIA SOSIAL */}
       {activeTab === 'SETTINGS' && (
         <form onSubmit={handleSaveSettings} className="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm space-y-8 max-w-4xl">
-          <div className="flex items-center justify-between border-b pb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-4">
             <div>
               <h2 className="text-xl font-black text-slate-800">Manajemen Content Profil, Visi, Sambutan Kepsek & Peta Lokasi</h2>
               <p className="text-xs text-slate-500 mt-0.5">Edit seluruh identitas sekolah, visi, misi, tujuan, sambutan pimpinan, serta embedded Google Maps secara real-time.</p>
             </div>
             <button 
               type="submit"
-              className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-2.5 rounded-full text-xs transition-colors shadow flex items-center gap-2"
+              disabled={isSavingSettings}
+              className={`font-bold px-6 py-2.5 rounded-full text-xs transition-all shadow-md flex items-center justify-center gap-2 shrink-0 cursor-pointer ${
+                isSavedSettingsSuccess
+                  ? 'bg-emerald-500 text-white ring-2 ring-emerald-300 shadow-emerald-500/40'
+                  : isSavingSettings
+                  ? 'bg-emerald-700/80 text-white cursor-wait opacity-90'
+                  : 'bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white'
+              }`}
             >
-              <Save size={16} /> Simpan Semua Perubahan
+              {isSavingSettings ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin shrink-0" />
+                  <span>Menyimpan...</span>
+                </>
+              ) : isSavedSettingsSuccess ? (
+                <>
+                  <CheckCircle2 size={16} className="text-white animate-bounce shrink-0" />
+                  <span>Tersimpan!</span>
+                </>
+              ) : (
+                <>
+                  <Save size={16} />
+                  <span>Simpan Semua Perubahan</span>
+                </>
+              )}
             </button>
           </div>
 
@@ -1575,12 +1632,45 @@ export default function AdminContent() {
             </div>
           </div>
 
-          <div className="pt-4 border-t flex justify-end">
+          <div className="pt-6 border-t flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+            {isSavedSettingsSuccess ? (
+              <div className="flex items-center gap-2.5 text-emerald-800 bg-emerald-50 border border-emerald-300 px-4 py-2.5 rounded-2xl text-xs font-bold animate-fadeIn shadow-xs">
+                <CheckCircle2 size={18} className="text-emerald-600 shrink-0" />
+                <span>Perubahan profil & visi sekolah berhasil disimpan secara real-time!</span>
+              </div>
+            ) : (
+              <p className="text-[11px] text-slate-500">
+                Klik tombol di bawah untuk menyimpan seluruh data identitas, visi, misi, sambutan, dan kontak ke database sistem.
+              </p>
+            )}
+
             <button 
               type="submit"
-              className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-8 py-3.5 rounded-full text-xs transition-colors shadow-lg flex items-center gap-2 uppercase tracking-wider"
+              disabled={isSavingSettings}
+              className={`w-full sm:w-auto font-black px-8 py-3.5 rounded-full text-xs sm:text-sm transition-all shadow-lg flex items-center justify-center gap-2.5 uppercase tracking-wider cursor-pointer ${
+                isSavedSettingsSuccess
+                  ? 'bg-emerald-500 text-white ring-4 ring-emerald-300/50 shadow-emerald-500/40 scale-[1.02]'
+                  : isSavingSettings
+                  ? 'bg-emerald-700/80 text-white cursor-wait opacity-90'
+                  : 'bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white hover:shadow-xl'
+              }`}
             >
-              <Save size={18} /> Simpan Perubahan Profil & Visi Sekolah
+              {isSavingSettings ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin shrink-0" />
+                  <span>Menyimpan Perubahan...</span>
+                </>
+              ) : isSavedSettingsSuccess ? (
+                <>
+                  <CheckCircle2 size={18} className="text-white animate-bounce shrink-0" />
+                  <span>Data Berhasil Tersimpan!</span>
+                </>
+              ) : (
+                <>
+                  <Save size={18} />
+                  <span>Simpan Perubahan Profil & Visi Sekolah</span>
+                </>
+              )}
             </button>
           </div>
         </form>

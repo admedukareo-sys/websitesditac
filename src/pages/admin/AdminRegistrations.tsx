@@ -711,8 +711,8 @@ export default function AdminRegistrations() {
         search: search.trim() || undefined,
       },
       schoolName: siteSettings.schoolName || 'SD IT ANDALAS CENDEKIA',
-      schoolAddress: siteSettings.address || 'Komp. Rukan Andalas Cendekia, Sumatera Barat',
-      schoolPhone: siteSettings.phone || '0812-3456-7890',
+      schoolAddress: siteSettings.address || 'JL. Kampung Baru No.36, Kel. Sikabau, Kec. Pulau Punjung, Kab. Dharmasraya',
+      schoolPhone: siteSettings.phone || '0811-6696-990',
       academicYear: siteSettings.spmbAcademicYear || '2027/2028',
     });
 
@@ -740,8 +740,8 @@ export default function AdminRegistrations() {
     }
 
     const schoolName = siteSettings.schoolName || 'SD IT ANDALAS CENDEKIA';
-    const schoolAddress = siteSettings.address || 'Komp. Rukan Andalas Cendekia, Sumatera Barat';
-    const schoolPhone = siteSettings.phone || '0812-3456-7890';
+    const schoolAddress = siteSettings.address || 'JL. Kampung Baru No.36, Kel. Sikabau, Kec. Pulau Punjung, Kab. Dharmasraya';
+    const schoolPhone = siteSettings.phone || '0811-6696-990';
     const academicYear = siteSettings.spmbAcademicYear || '2027/2028';
     const principalName = siteSettings.principalName || 'Rika Handayani, S.Pd.,Gr.';
 
@@ -884,8 +884,8 @@ export default function AdminRegistrations() {
     }
 
     const schoolName = siteSettings.schoolName || 'SD IT ANDALAS CENDEKIA';
-    const schoolAddress = siteSettings.address || 'Komp. Rukan Andalas Cendekia, Sumatera Barat';
-    const schoolPhone = siteSettings.phone || '0812-3456-7890';
+    const schoolAddress = siteSettings.address || 'JL. Kampung Baru No.36, Kel. Sikabau, Kec. Pulau Punjung, Kab. Dharmasraya';
+    const schoolPhone = siteSettings.phone || '0811-6696-990';
     const academicYear = siteSettings.spmbAcademicYear || '2027/2028';
 
     const html = `

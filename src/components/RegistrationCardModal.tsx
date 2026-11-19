@@ -70,7 +70,7 @@ export default function RegistrationCardModal({ isOpen, onClose, user, registrat
           <h2 className="text-2xl font-extrabold text-slate-900 uppercase">{settings.schoolName || 'SD IT ANDALAS CENDEKIA'}</h2>
           <p className="text-xs font-bold text-amber-600 italic mb-1">"{settings.tagline || 'Unggul Berkarakter Al-Qur’an'}"</p>
           <p className="text-[11px] text-slate-500">
-            {settings.address || 'JL. Kampung Baru No.36, Kel. Sikabau, Kec. Pulau Punjung, Kab. Dharmasraya'} | Telp: {settings.phone || '0812-6655-8123'} | NPSN: {settings.npsn || '10310802'}
+            {settings.address || 'JL. Kampung Baru No.36, Kel. Sikabau, Kec. Pulau Punjung, Kab. Dharmasraya'} | Telp: {settings.phone || '0811-6696-990'} | NPSN: {settings.npsn || '10310802'}
           </p>
         </div>
 

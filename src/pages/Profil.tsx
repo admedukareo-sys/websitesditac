@@ -36,7 +36,7 @@ export default function Profil() {
   const npsn = settings?.npsn || '10310802';
   const tagline = settings?.tagline || 'Sekolah Generasi Pemimpin Qur’ani';
   const address = settings?.address || 'JL. Kampung Baru No.36, RT 00/RW 00, Kel. Sikabau, Kec. Pulau Punjung, Kab. Dharmasraya, Prov. Sumatera Barat 27573';
-  const phone = settings?.phone || '0812-6655-8123';
+  const phone = settings?.phone || '0811-6696-990';
   const email = settings?.email || 'sditac1@gmail.com';
   const principalName = settings?.principalName || 'Rika Handayani, S.Pd.,Gr.';
   const principalTitle = settings?.principalTitle || 'Kepala Sekolah SD IT Andalas Cendekia';
