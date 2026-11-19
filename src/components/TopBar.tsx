@@ -1,0 +1,78 @@
+import React, { useState, useEffect } from 'react';
+import { Phone, Mail, Clock, ShieldCheck } from 'lucide-react';
+import { getSiteSettings, SiteSettings } from '@/lib/storage';
+import { FacebookIcon, InstagramIcon, YoutubeIcon } from './SocialIcons';
+
+export default function TopBar() {
+  const [settings, setSettings] = useState<SiteSettings | null>(null);
+
+  useEffect(() => {
+    setSettings(getSiteSettings());
+  }, []);
+
+  const phone = settings?.phone || '0811-6696-990';
+  const email = settings?.email || 'sditac1@gmail.com';
+  const fb = settings?.facebookUrl || '#';
+  const ig = settings?.instagramUrl || '#';
+  const yt = settings?.youtubeUrl || '#';
+
+  return (
+    <div className="bg-emerald-950 text-emerald-200 text-xs py-2 px-4 border-b border-emerald-800/60 hidden lg:block">
+      <div className="container mx-auto flex items-center justify-between">
+        {/* Left: Official Contact Info */}
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-1.5 hover:text-white transition-colors">
+            <Phone size={14} className="text-amber-400" />
+            <span>{phone}</span>
+          </div>
+          <div className="flex items-center gap-1.5 hover:text-white transition-colors">
+            <Mail size={14} className="text-amber-400" />
+            <span>{email}</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Clock size={14} className="text-amber-400" />
+            <span>Dharmasraya, Sumatera Barat</span>
+          </div>
+        </div>
+
+        {/* Right: School Tagline & Badges */}
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-1.5 bg-emerald-900/80 px-3 py-0.5 rounded-full text-amber-300 font-bold tracking-wide">
+            <ShieldCheck size={13} className="text-amber-400" />
+            <span>{settings?.tagline || 'Sekolah Generasi Pemimpin Qur’ani'}</span>
+          </div>
+          
+          <div className="flex items-center gap-2 text-emerald-300">
+            <a
+              href={fb}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-7 h-7 rounded-lg bg-emerald-900/90 text-emerald-200 hover:bg-[#1877F2] hover:text-white flex items-center justify-center transition-all duration-300 border border-emerald-800/80 hover:scale-110 shadow-sm"
+              title="Facebook Official"
+            >
+              <FacebookIcon className="w-3.5 h-3.5" />
+            </a>
+            <a
+              href={ig}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-7 h-7 rounded-lg bg-emerald-900/90 text-emerald-200 hover:bg-gradient-to-tr hover:from-amber-500 hover:via-rose-500 hover:to-purple-600 hover:text-white flex items-center justify-center transition-all duration-300 border border-emerald-800/80 hover:scale-110 shadow-sm"
+              title="Instagram Official"
+            >
+              <InstagramIcon className="w-3.5 h-3.5" />
+            </a>
+            <a
+              href={yt}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-7 h-7 rounded-lg bg-emerald-900/90 text-emerald-200 hover:bg-[#FF0000] hover:text-white flex items-center justify-center transition-all duration-300 border border-emerald-800/80 hover:scale-110 shadow-sm"
+              title="YouTube Official"
+            >
+              <YoutubeIcon className="w-3.5 h-3.5" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

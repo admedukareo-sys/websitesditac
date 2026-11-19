@@ -1,0 +1,213 @@
+import React, { useEffect } from 'react';
+import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
+import { LayoutDashboard, Users, CreditCard, LogOut, ArrowLeft, User, FileEdit, Globe } from 'lucide-react';
+
+export default function AdminLayout() {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!user || (user.role !== 'ADMIN' && user.role !== 'PANITIA_SPMB')) {
+      navigate('/spmb/login');
+      return;
+    }
+    // Jika panitia SPMB mengakses halaman selain dashboard atau registrations, arahkan ke registrations
+    if (user.role === 'PANITIA_SPMB' && (
+      location.pathname.startsWith('/admin/content') || 
+      location.pathname.startsWith('/admin/visitors') || 
+      location.pathname.startsWith('/admin/payments')
+    )) {
+      navigate('/admin/registrations');
+    }
+  }, [user, navigate, location.pathname]);
+
+  if (!user || (user.role !== 'ADMIN' && user.role !== 'PANITIA_SPMB')) {
+    return null;
+  }
+
+  const isPanitia = user.role === 'PANITIA_SPMB';
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
+  const isActive = (path: string) => {
+    if (path === '/admin' && location.pathname === '/admin') return true;
+    if (path !== '/admin' && location.pathname.startsWith(path)) return true;
+    return false;
+  };
+
+  return (
+    <div className="flex min-h-screen bg-slate-100 font-sans">
+      {/* Sidebar */}
+      <aside className="w-64 bg-emerald-950 text-emerald-100 flex-shrink-0 flex flex-col justify-between border-r border-emerald-900 shadow-xl">
+        <div>
+          {/* Brand Header */}
+          <div className="p-5 border-b border-emerald-900/80 bg-emerald-900/40">
+            <div className="flex items-center gap-3 mb-1">
+              <div className="bg-white p-1 rounded-xl shadow">
+                <img 
+                  src="/logo.png" 
+                  alt="Logo Official SD IT Andalas Cendekia" 
+                  className="h-8 w-auto object-contain"
+                />
+              </div>
+              <h2 className="text-base font-extrabold text-white">
+                {isPanitia ? 'Panitia SPMB' : 'Panel Admin'}
+              </h2>
+            </div>
+            <p className="text-[11px] text-amber-300 font-bold">
+              {isPanitia ? 'Khusus Data Pendaftar SD IT' : 'SD IT Andalas Cendekia'}
+            </p>
+          </div>
+
+          {/* Navigation Links */}
+          <nav className="px-3 py-6 space-y-1.5 font-semibold text-xs">
+            <Link 
+              to="/admin" 
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+                isActive('/admin') && location.pathname === '/admin'
+                  ? 'bg-amber-500 text-amber-950 font-bold shadow-md shadow-amber-500/20' 
+                  : 'hover:bg-emerald-900/80 text-emerald-200 hover:text-white'
+              }`}
+            >
+              <LayoutDashboard size={18} />
+              <span>Dashboard {isPanitia ? 'Panitia' : 'Admin'}</span>
+            </Link>
+
+            <Link 
+              to="/admin/registrations" 
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+                isActive('/admin/registrations') 
+                  ? 'bg-amber-500 text-amber-950 font-bold shadow-md shadow-amber-500/20' 
+                  : 'hover:bg-emerald-900/80 text-emerald-200 hover:text-white'
+              }`}
+            >
+              <Users size={18} />
+              <span>Data Pendaftar SPMB</span>
+            </Link>
+
+            {/* Menu Khusus Administrator (Disembunyikan untuk Panitia SPMB) */}
+            {!isPanitia && (
+              <>
+                <Link 
+                  to="/admin/payments" 
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+                    isActive('/admin/payments') 
+                      ? 'bg-amber-500 text-amber-950 font-bold shadow-md shadow-amber-500/20' 
+                      : 'hover:bg-emerald-900/80 text-emerald-200 hover:text-white'
+                  }`}
+                >
+                  <CreditCard size={18} />
+                  <span>Verifikasi Pembayaran</span>
+                </Link>
+
+                <Link 
+                  to="/admin/visitors" 
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+                    isActive('/admin/visitors') 
+                      ? 'bg-amber-500 text-amber-950 font-bold shadow-md shadow-amber-500/20' 
+                      : 'hover:bg-emerald-900/80 text-emerald-200 hover:text-white'
+                  }`}
+                >
+                  <Globe size={18} />
+                  <span>Analisis Kunjungan & Lokasi</span>
+                </Link>
+
+                <Link 
+                  to="/admin/content" 
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+                    isActive('/admin/content') 
+                      ? 'bg-amber-500 text-amber-950 font-bold shadow-md shadow-amber-500/20' 
+                      : 'hover:bg-emerald-900/80 text-emerald-200 hover:text-white'
+                  }`}
+                >
+                  <FileEdit size={18} />
+                  <span>Kelola Isi Website</span>
+                </Link>
+              </>
+            )}
+          </nav>
+        </div>
+
+        {/* Sidebar Footer (User info & Logout) */}
+        <div className="p-4 border-t border-emerald-900/80 bg-emerald-950/80 space-y-2">
+          <Link 
+            to="/" 
+            className="flex items-center gap-2 text-xs font-semibold text-emerald-300 hover:text-white px-3 py-2 rounded-lg hover:bg-emerald-900/60 transition-colors"
+          >
+            <ArrowLeft size={16} />
+            <span>Website Utama</span>
+          </Link>
+
+          <button 
+            onClick={handleLogout}
+            className="w-full flex items-center justify-center gap-2 bg-red-600/90 hover:bg-red-600 text-white font-bold text-xs py-2.5 px-4 rounded-xl shadow transition-colors"
+          >
+            <LogOut size={16} />
+            <span>Logout Admin</span>
+          </button>
+        </div>
+      </aside>
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        {/* Top Header Bar */}
+        <header className="bg-white border-b border-slate-200 px-8 py-4 flex items-center justify-between shadow-sm">
+          <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
+            <span>Portal Admin</span>
+            <span>/</span>
+            <span className="font-bold text-slate-800">
+              {location.pathname === '/admin' 
+                ? 'Dashboard' 
+                : location.pathname.includes('registrations') 
+                ? 'Data Pendaftar' 
+                : location.pathname.includes('payments') 
+                ? 'Verifikasi Pembayaran' 
+                : location.pathname.includes('visitors')
+                ? 'Analisis Kunjungan & Lokasi'
+                : 'Kelola Isi Website'}
+            </span>
+          </div>
+
+          {/* Admin User Info & Logout Button Header */}
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 text-right">
+              <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center text-xs border border-emerald-300">
+                <User size={16} />
+              </div>
+              <div className="hidden sm:block">
+                <div className="text-xs font-bold text-slate-800 leading-tight flex items-center gap-1.5 justify-end">
+                  <span>{user.name}</span>
+                  {isPanitia ? (
+                    <span className="bg-amber-100 text-amber-900 border border-amber-300 text-[9px] font-extrabold px-1.5 py-0.5 rounded-md">Panitia SPMB</span>
+                  ) : (
+                    <span className="bg-emerald-100 text-emerald-900 border border-emerald-300 text-[9px] font-extrabold px-1.5 py-0.5 rounded-md">Super Admin</span>
+                  )}
+                </div>
+                <div className="text-[10px] text-slate-500">{user.email}</div>
+              </div>
+            </div>
+
+            <button
+              onClick={handleLogout}
+              className="bg-red-50 hover:bg-red-100 text-red-600 font-bold text-xs px-3.5 py-2 rounded-xl transition-colors flex items-center gap-1.5 border border-red-200"
+              title="Logout dari Panel"
+            >
+              <LogOut size={14} />
+              <span className="hidden sm:inline">Logout {isPanitia ? 'Panitia' : 'Admin'}</span>
+            </button>
+          </div>
+        </header>
+
+        {/* Content Body */}
+        <main className="flex-1 overflow-y-auto p-8">
+          <Outlet />
+        </main>
+      </div>
+    </div>
+  );
+}

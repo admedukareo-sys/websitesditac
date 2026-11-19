@@ -1,0 +1,13 @@
+DirectoryIndex index.html index.php
+
+# LiteSpeed & Apache 2.4+ Fallback Resource for React SPA Routing
+FallbackResource /index.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.*)$ /index.html [QSA,L]
+</IfModule>
