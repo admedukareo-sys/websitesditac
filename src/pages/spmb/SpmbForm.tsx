@@ -278,37 +278,262 @@ export default function SpmbForm() {
                   </select>
                 </div>
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-slate-700">Alamat Lengkap</label>
-                  <textarea name="address" value={formData.address || ''} onChange={handleChange} disabled={isReadOnly} required rows={3} className="mt-1 block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500 disabled:bg-slate-100"></textarea>
+                  <label className="block text-sm font-medium text-slate-700">
+                    Alamat Lengkap Tempat Tinggal (Domisili) <span className="text-red-500">*</span>
+                  </label>
+                  <textarea 
+                    name="address" 
+                    value={formData.address || ''} 
+                    onChange={handleChange} 
+                    disabled={isReadOnly} 
+                    required 
+                    rows={3} 
+                    placeholder="Contoh: Jl. Kampung Baru No. 12, RT 02/RW 01, Sikabau, Pulau Punjung"
+                    className="mt-1 block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500 disabled:bg-slate-100 text-sm"
+                  ></textarea>
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-slate-700">
+                    Jarak Tempat Tinggal (Rumah) ke Sekolah <span className="text-red-500">*</span>
+                  </label>
+                  <select 
+                    name="distanceToSchool" 
+                    value={formData.distanceToSchool || ''} 
+                    onChange={handleChange} 
+                    disabled={isReadOnly} 
+                    required 
+                    className="mt-1 block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500 disabled:bg-slate-100 bg-white text-sm"
+                  >
+                    <option value="">-- Pilih Perkiraan Jarak Rumah ke Sekolah --</option>
+                    <option value="Kurang dari 1 km">Kurang dari 1 km</option>
+                    <option value="1 – 3 km">1 – 3 km</option>
+                    <option value="3 – 5 km">3 – 5 km</option>
+                    <option value="5 – 10 km">5 – 10 km</option>
+                    <option value="Lebih dari 10 km">Lebih dari 10 km</option>
+                  </select>
+                  <p className="text-[11px] text-slate-500 mt-1">
+                    Perkiraan jarak tempuh dari rumah ananda ke kampus SD IT Andalas Cendekia.
+                  </p>
                 </div>
               </div>
             </section>
 
             {/* Data Orang Tua */}
             <section>
-              <h2 className="text-xl font-semibold text-slate-800 border-b pb-2 mb-4">Data Orang Tua</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700">Nama Ayah</label>
-                  <input type="text" name="fatherName" value={formData.fatherName || ''} onChange={handleChange} disabled={isReadOnly} required className="mt-1 block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500 disabled:bg-slate-100" />
+              <h2 className="text-xl font-semibold text-slate-800 border-b pb-2 mb-4">
+                Data Orang Tua / Wali
+              </h2>
+
+              <div className="space-y-6">
+                {/* Data Ayah */}
+                <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                  <h3 className="text-sm font-bold text-slate-900 mb-3 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
+                    <span>Data Ayah Kandung</span>
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700">
+                        Nama Lengkap Ayah <span className="text-red-500">*</span>
+                      </label>
+                      <input 
+                        type="text" 
+                        name="fatherName" 
+                        value={formData.fatherName || ''} 
+                        onChange={handleChange} 
+                        disabled={isReadOnly} 
+                        required 
+                        placeholder="Contoh: Hendra Wijaya"
+                        className="mt-1 block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500 disabled:bg-slate-100 bg-white text-sm" 
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700">
+                        Pekerjaan Ayah <span className="text-red-500">*</span>
+                      </label>
+                      <select 
+                        name="fatherOccupation" 
+                        value={formData.fatherOccupation || ''} 
+                        onChange={handleChange} 
+                        disabled={isReadOnly} 
+                        required 
+                        className="mt-1 block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500 disabled:bg-slate-100 bg-white text-sm"
+                      >
+                        <option value="">-- Pilih Pekerjaan Ayah --</option>
+                        <option value="PNS / ASN">PNS / ASN</option>
+                        <option value="TNI / Polri">TNI / Polri</option>
+                        <option value="Pegawai BUMN / BUMD">Pegawai BUMN / BUMD</option>
+                        <option value="Karyawan Swasta">Karyawan Swasta</option>
+                        <option value="Wiraswasta / Wirausaha / Pedagang">Wiraswasta / Wirausaha / Pedagang</option>
+                        <option value="Petani / Pekebun / Peternak">Petani / Pekebun / Peternak</option>
+                        <option value="Nelayan">Nelayan</option>
+                        <option value="Buruh / Pekerja Harian Lepas">Buruh / Pekerja Harian Lepas</option>
+                        <option value="Guru / Dosen">Guru / Dosen</option>
+                        <option value="Dokter / Tenaga Medis">Dokter / Tenaga Medis</option>
+                        <option value="Pensiunan">Pensiunan</option>
+                        <option value="Sudah Meninggal">Sudah Meninggal</option>
+                        <option value="Tidak Bekerja">Tidak Bekerja</option>
+                        <option value="Lainnya">Lainnya</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700">
+                        Penghasilan Ayah / Bulan <span className="text-red-500">*</span>
+                      </label>
+                      <select 
+                        name="fatherIncome" 
+                        value={formData.fatherIncome || ''} 
+                        onChange={handleChange} 
+                        disabled={isReadOnly} 
+                        required 
+                        className="mt-1 block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500 disabled:bg-slate-100 bg-white text-sm"
+                      >
+                        <option value="">-- Pilih Penghasilan Ayah --</option>
+                        <option value="Kurang dari Rp 1.000.000">Kurang dari Rp 1.000.000</option>
+                        <option value="Rp 1.000.000 - Rp 2.500.000">Rp 1.000.000 - Rp 2.500.000</option>
+                        <option value="Rp 2.500.000 - Rp 5.000.000">Rp 2.500.000 - Rp 5.000.000</option>
+                        <option value="Rp 5.000.000 - Rp 10.000.000">Rp 5.000.000 - Rp 10.000.000</option>
+                        <option value="Lebih dari Rp 10.000.000">Lebih dari Rp 10.000.000</option>
+                        <option value="Tidak Berpenghasilan">Tidak Berpenghasilan</option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700">Nama Ibu</label>
-                  <input type="text" name="motherName" value={formData.motherName || ''} onChange={handleChange} disabled={isReadOnly} required className="mt-1 block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500 disabled:bg-slate-100" />
+
+                {/* Data Ibu */}
+                <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                  <h3 className="text-sm font-bold text-slate-900 mb-3 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-teal-600"></span>
+                    <span>Data Ibu Kandung</span>
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700">
+                        Nama Lengkap Ibu <span className="text-red-500">*</span>
+                      </label>
+                      <input 
+                        type="text" 
+                        name="motherName" 
+                        value={formData.motherName || ''} 
+                        onChange={handleChange} 
+                        disabled={isReadOnly} 
+                        required 
+                        placeholder="Contoh: Siti Fatimah"
+                        className="mt-1 block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500 disabled:bg-slate-100 bg-white text-sm" 
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700">
+                        Pekerjaan Ibu <span className="text-red-500">*</span>
+                      </label>
+                      <select 
+                        name="motherOccupation" 
+                        value={formData.motherOccupation || ''} 
+                        onChange={handleChange} 
+                        disabled={isReadOnly} 
+                        required 
+                        className="mt-1 block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500 disabled:bg-slate-100 bg-white text-sm"
+                      >
+                        <option value="">-- Pilih Pekerjaan Ibu --</option>
+                        <option value="Ibu Rumah Tangga (IRT)">Ibu Rumah Tangga (IRT)</option>
+                        <option value="PNS / ASN">PNS / ASN</option>
+                        <option value="TNI / Polri">TNI / Polri</option>
+                        <option value="Pegawai BUMN / BUMD">Pegawai BUMN / BUMD</option>
+                        <option value="Karyawan Swasta">Karyawan Swasta</option>
+                        <option value="Wiraswasta / Wirausaha / Pedagang">Wiraswasta / Wirausaha / Pedagang</option>
+                        <option value="Petani / Pekebun / Peternak">Petani / Pekebun / Peternak</option>
+                        <option value="Guru / Dosen">Guru / Dosen</option>
+                        <option value="Dokter / Bidan / Perawat / Medis">Dokter / Bidan / Perawat / Medis</option>
+                        <option value="Buruh / Pekerja Harian Lepas">Buruh / Pekerja Harian Lepas</option>
+                        <option value="Pensiunan">Pensiunan</option>
+                        <option value="Sudah Meninggal">Sudah Meninggal</option>
+                        <option value="Tidak Bekerja">Tidak Bekerja</option>
+                        <option value="Lainnya">Lainnya</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700">
+                        Penghasilan Ibu / Bulan <span className="text-red-500">*</span>
+                      </label>
+                      <select 
+                        name="motherIncome" 
+                        value={formData.motherIncome || ''} 
+                        onChange={handleChange} 
+                        disabled={isReadOnly} 
+                        required 
+                        className="mt-1 block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500 disabled:bg-slate-100 bg-white text-sm"
+                      >
+                        <option value="">-- Pilih Penghasilan Ibu --</option>
+                        <option value="Tidak Berpenghasilan / IRT">Tidak Berpenghasilan / IRT</option>
+                        <option value="Kurang dari Rp 1.000.000">Kurang dari Rp 1.000.000</option>
+                        <option value="Rp 1.000.000 - Rp 2.500.000">Rp 1.000.000 - Rp 2.500.000</option>
+                        <option value="Rp 2.500.000 - Rp 5.000.000">Rp 2.500.000 - Rp 5.000.000</option>
+                        <option value="Rp 5.000.000 - Rp 10.000.000">Rp 5.000.000 - Rp 10.000.000</option>
+                        <option value="Lebih dari Rp 10.000.000">Lebih dari Rp 10.000.000</option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-slate-700">No. WhatsApp Orang Tua</label>
-                  <input type="tel" name="parentPhone" value={formData.parentPhone || ''} onChange={handleChange} disabled={isReadOnly} required className="mt-1 block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500 disabled:bg-slate-100" />
+
+                {/* Kontak WhatsApp Orang Tua */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-700">
+                    No. WhatsApp Aktif Orang Tua / Wali <span className="text-red-500">*</span>
+                  </label>
+                  <input 
+                    type="tel" 
+                    name="parentPhone" 
+                    value={formData.parentPhone || ''} 
+                    onChange={handleChange} 
+                    disabled={isReadOnly} 
+                    required 
+                    placeholder="Contoh: 081234567890"
+                    className="mt-1 block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500 disabled:bg-slate-100 bg-white text-sm" 
+                  />
+                  <p className="text-[11px] text-slate-500 mt-1">
+                    Nomor WhatsApp ini digunakan untuk koordinasi tahapan seleksi observasi, wawancara, & pengumuman kelulusan.
+                  </p>
                 </div>
               </div>
             </section>
 
             {/* Asal Sekolah */}
             <section>
-              <h2 className="text-xl font-semibold text-slate-800 border-b pb-2 mb-4">Pendidikan Terakhir / Asal Sekolah</h2>
-              <div>
-                <label className="block text-sm font-medium text-slate-700">Asal Sekolah (TK / RA / PAUD)</label>
-                <input type="text" name="previousSchool" value={formData.previousSchool || ''} onChange={handleChange} disabled={isReadOnly} required className="mt-1 block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500 disabled:bg-slate-100" />
+              <h2 className="text-xl font-semibold text-slate-800 border-b pb-2 mb-4">
+                Pendidikan Terakhir / Asal Sekolah
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700">
+                    Nama Asal Sekolah (TK / RA / PAUD) <span className="text-red-500">*</span>
+                  </label>
+                  <input 
+                    type="text" 
+                    name="previousSchool" 
+                    value={formData.previousSchool || ''} 
+                    onChange={handleChange} 
+                    disabled={isReadOnly} 
+                    required 
+                    placeholder="Contoh: TK Islam Terpadu Al-Kautsar"
+                    className="mt-1 block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500 disabled:bg-slate-100 text-sm" 
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700">
+                    Alamat Lengkap Sekolah Asal <span className="text-red-500">*</span>
+                  </label>
+                  <input 
+                    type="text" 
+                    name="schoolAddress" 
+                    value={formData.schoolAddress || ''} 
+                    onChange={handleChange} 
+                    disabled={isReadOnly} 
+                    required 
+                    placeholder="Contoh: Jl. Lintas Sumatera Km. 2, Pulau Punjung"
+                    className="mt-1 block w-full px-3 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500 disabled:bg-slate-100 text-sm" 
+                  />
+                </div>
               </div>
             </section>
 

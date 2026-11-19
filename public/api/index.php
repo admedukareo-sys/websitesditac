@@ -55,6 +55,63 @@ function getAuthenticatedUser($secret) {
     return $payload;
 }
 
+// ==============================================================================
+// AUTO ENSURE SKEMA TABEL REGISTRATIONS LENGKAP DI HOSTING
+// ==============================================================================
+function ensureRegistrationsSchema($pdo) {
+    static $alreadyEnsured = false;
+    if ($alreadyEnsured) return;
+
+    $regCols = [
+        'client_id' => "VARCHAR(100) DEFAULT NULL",
+        'student_name' => "VARCHAR(255) DEFAULT NULL",
+        'document_drive_url' => "VARCHAR(500) DEFAULT NULL",
+        'foto_url' => "LONGTEXT DEFAULT NULL",
+        'payment_proof_url' => "LONGTEXT DEFAULT NULL",
+        'rejection_reason' => "TEXT DEFAULT NULL",
+        'spmb_stage' => "VARCHAR(50) DEFAULT 'PENDAFTARAN'",
+        'stifin_result' => "VARCHAR(255) DEFAULT NULL",
+        'interview_child_notes' => "TEXT DEFAULT NULL",
+        'interview_parent_notes' => "TEXT DEFAULT NULL",
+        'graduation_status' => "VARCHAR(50) DEFAULT 'PENDING'",
+        'stage_note' => "TEXT DEFAULT NULL",
+        'program_type' => "VARCHAR(50) DEFAULT 'BOARDING'",
+        'info_source' => "VARCHAR(255) DEFAULT NULL",
+        'reason_to_join' => "TEXT DEFAULT NULL",
+        'test_score' => "DECIMAL(5,2) DEFAULT NULL",
+        'interview_notes' => "TEXT DEFAULT NULL",
+        're_registration_proof_url' => "VARCHAR(500) DEFAULT NULL",
+        'uniform_size' => "VARCHAR(10) DEFAULT NULL",
+        'akta_url' => "VARCHAR(500) DEFAULT NULL",
+        'kk_url' => "VARCHAR(500) DEFAULT NULL",
+        'rapor_url' => "VARCHAR(500) DEFAULT NULL",
+        'school_address' => "VARCHAR(255) DEFAULT NULL",
+        'father_occupation' => "VARCHAR(100) DEFAULT NULL",
+        'mother_occupation' => "VARCHAR(100) DEFAULT NULL",
+        'father_income' => "VARCHAR(100) DEFAULT NULL",
+        'mother_income' => "VARCHAR(100) DEFAULT NULL",
+        'distance_to_school' => "VARCHAR(50) DEFAULT NULL",
+    ];
+
+    foreach ($regCols as $col => $colDef) {
+        try {
+            $pdo->query("SELECT `{$col}` FROM `registrations` LIMIT 1");
+        } catch (Exception $e) {
+            try {
+                $pdo->exec("ALTER TABLE `registrations` ADD COLUMN `{$col}` {$colDef}");
+            } catch (Exception $e2) {}
+        }
+    }
+
+    try {
+        $pdo->exec("ALTER TABLE `registrations` MODIFY COLUMN `id` BIGINT(20) NOT NULL AUTO_INCREMENT");
+        $pdo->exec("ALTER TABLE `registrations` MODIFY COLUMN `foto_url` LONGTEXT DEFAULT NULL");
+        $pdo->exec("ALTER TABLE `registrations` MODIFY COLUMN `payment_proof_url` LONGTEXT DEFAULT NULL");
+    } catch (Exception $e) {}
+
+    $alreadyEnsured = true;
+}
+
 switch ($action) {
     case 'ping':
         echo json_encode([
@@ -608,15 +665,8 @@ switch ($action) {
         exit();
 
     case 'get_registrations':
-        try {
-            $pdo->query("SELECT `client_id` FROM `registrations` LIMIT 1");
-        } catch (Exception $e) {
-            try {
-                $pdo->exec("ALTER TABLE `registrations` ADD COLUMN `client_id` VARCHAR(100) DEFAULT NULL AFTER `user_id`");
-            } catch (Exception $e2) {}
-        }
+        ensureRegistrationsSchema($pdo);
 
-        // Pastikan kolom foto_url dan payment_proof_url selalu LONGTEXT di database hosting
         try {
             $pdo->exec("ALTER TABLE `registrations` MODIFY COLUMN `foto_url` LONGTEXT DEFAULT NULL");
             $pdo->exec("ALTER TABLE `registrations` MODIFY COLUMN `payment_proof_url` LONGTEXT DEFAULT NULL");
@@ -648,38 +698,7 @@ switch ($action) {
         $rejectionReason = trim($r['rejectionReason'] ?? $r['rejection_reason'] ?? '');
 
         // Auto ensure all registrations columns exist
-        $regCols = [
-            'client_id' => "VARCHAR(100) DEFAULT NULL",
-            'student_name' => "VARCHAR(255) DEFAULT NULL",
-            'document_drive_url' => "VARCHAR(500) DEFAULT NULL",
-            'foto_url' => "LONGTEXT DEFAULT NULL",
-            'rejection_reason' => "TEXT DEFAULT NULL",
-            'spmb_stage' => "VARCHAR(50) DEFAULT 'PENDAFTARAN'",
-            'stifin_result' => "VARCHAR(255) DEFAULT NULL",
-            'interview_child_notes' => "TEXT DEFAULT NULL",
-            'interview_parent_notes' => "TEXT DEFAULT NULL",
-            'graduation_status' => "VARCHAR(50) DEFAULT 'PENDING'",
-            'stage_note' => "TEXT DEFAULT NULL",
-            'program_type' => "VARCHAR(50) DEFAULT 'BOARDING'",
-            'info_source' => "VARCHAR(255) DEFAULT NULL",
-            'reason_to_join' => "TEXT DEFAULT NULL",
-            'test_score' => "DECIMAL(5,2) DEFAULT NULL",
-            'interview_notes' => "TEXT DEFAULT NULL",
-            're_registration_proof_url' => "VARCHAR(500) DEFAULT NULL",
-            'uniform_size' => "VARCHAR(10) DEFAULT NULL",
-            'akta_url' => "VARCHAR(500) DEFAULT NULL",
-            'kk_url' => "VARCHAR(500) DEFAULT NULL",
-            'rapor_url' => "VARCHAR(500) DEFAULT NULL",
-        ];
-        foreach ($regCols as $col => $colDef) {
-            try {
-                $pdo->query("SELECT `{$col}` FROM `registrations` LIMIT 1");
-            } catch (Exception $e) {
-                try {
-                    $pdo->exec("ALTER TABLE `registrations` ADD COLUMN `{$col}` {$colDef}");
-                } catch (Exception $e2) {}
-            }
-        }
+        ensureRegistrationsSchema($pdo);
 
         // Pastikan id mendukung angka besar dan kolom foto/bukti mendukung LONGTEXT
         try {
@@ -765,7 +784,13 @@ switch ($action) {
                 `uniform_size` = COALESCE(NULLIF(?, ''), `uniform_size`),
                 `akta_url` = COALESCE(NULLIF(?, ''), `akta_url`), 
                 `kk_url` = COALESCE(NULLIF(?, ''), `kk_url`), 
-                `rapor_url` = COALESCE(NULLIF(?, ''), `rapor_url`)
+                `rapor_url` = COALESCE(NULLIF(?, ''), `rapor_url`),
+                `school_address` = COALESCE(NULLIF(?, ''), `school_address`),
+                `father_occupation` = COALESCE(NULLIF(?, ''), `father_occupation`),
+                `mother_occupation` = COALESCE(NULLIF(?, ''), `mother_occupation`),
+                `father_income` = COALESCE(NULLIF(?, ''), `father_income`),
+                `mother_income` = COALESCE(NULLIF(?, ''), `mother_income`),
+                `distance_to_school` = COALESCE(NULLIF(?, ''), `distance_to_school`)
                 WHERE `id` = ?");
             $stmt->execute([
                 $clientId ?: null,
@@ -802,20 +827,33 @@ switch ($action) {
                 $r['aktaUrl'] ?? $r['akta_url'] ?? null,
                 $r['kkUrl'] ?? $r['kk_url'] ?? null,
                 $r['raporUrl'] ?? $r['rapor_url'] ?? null,
+                $r['schoolAddress'] ?? $r['school_address'] ?? null,
+                $r['fatherOccupation'] ?? $r['father_occupation'] ?? null,
+                $r['motherOccupation'] ?? $r['mother_occupation'] ?? null,
+                $r['fatherIncome'] ?? $r['father_income'] ?? null,
+                $r['motherIncome'] ?? $r['mother_income'] ?? null,
+                $r['distanceToSchool'] ?? $r['distance_to_school'] ?? null,
                 $existing['id']
             ]);
             $savedId = (int)$existing['id'];
         } else {
             $stmt = $pdo->prepare("INSERT INTO `registrations` 
-                (`user_id`, `client_id`, `student_name`, `nisn`, `nik`, `birth_place`, `birth_date`, `gender`, `address`, `father_name`, `mother_name`, `parent_phone`, `previous_school`, `status`, `payment_status`, `payment_proof_url`, `program_type`, `info_source`, `reason_to_join`, `document_drive_url`, `foto_url`, `rejection_reason`, `spmb_stage`, `stifin_result`, `interview_child_notes`, `interview_parent_notes`, `graduation_status`, `stage_note`, `test_score`, `interview_notes`, `re_registration_proof_url`, `uniform_size`, `akta_url`, `kk_url`, `rapor_url`, `created_at`) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+                (`user_id`, `client_id`, `student_name`, `nisn`, `nik`, `birth_place`, `birth_date`, `gender`, `address`, `father_name`, `mother_name`, `parent_phone`, `previous_school`, `school_address`, `father_occupation`, `mother_occupation`, `father_income`, `mother_income`, `distance_to_school`, `status`, `payment_status`, `payment_proof_url`, `program_type`, `info_source`, `reason_to_join`, `document_drive_url`, `foto_url`, `rejection_reason`, `spmb_stage`, `stifin_result`, `interview_child_notes`, `interview_parent_notes`, `graduation_status`, `stage_note`, `test_score`, `interview_notes`, `re_registration_proof_url`, `uniform_size`, `akta_url`, `kk_url`, `rapor_url`, `created_at`) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
             $stmt->execute([
                 $userId,
                 $clientId ?: ($regId ? (string)$regId : null),
                 $studentName ?: null,
                 $r['nisn'] ?? '', $r['nik'] ?? '', $r['birthPlace'] ?? $r['birth_place'] ?? '', $r['birthDate'] ?? $r['birth_date'] ?? null, $r['gender'] ?? 'L',
                 $r['address'] ?? '', $r['fatherName'] ?? $r['father_name'] ?? '', $r['motherName'] ?? $r['mother_name'] ?? '', $r['parentPhone'] ?? $r['parent_phone'] ?? '',
-                $r['previousSchool'] ?? $r['previous_school'] ?? '', $r['status'] ?? 'DRAFT', $r['paymentStatus'] ?? $r['payment_status'] ?? 'UNPAID', $r['paymentProofUrl'] ?? $r['payment_proof_url'] ?? '',
+                $r['previousSchool'] ?? $r['previous_school'] ?? '',
+                $r['schoolAddress'] ?? $r['school_address'] ?? '',
+                $r['fatherOccupation'] ?? $r['father_occupation'] ?? '',
+                $r['motherOccupation'] ?? $r['mother_occupation'] ?? '',
+                $r['fatherIncome'] ?? $r['father_income'] ?? '',
+                $r['motherIncome'] ?? $r['mother_income'] ?? '',
+                $r['distanceToSchool'] ?? $r['distance_to_school'] ?? '',
+                $r['status'] ?? 'DRAFT', $r['paymentStatus'] ?? $r['payment_status'] ?? 'UNPAID', $r['paymentProofUrl'] ?? $r['payment_proof_url'] ?? '',
                 $r['programType'] ?? $r['program_type'] ?? 'BOARDING', $r['infoSource'] ?? $r['info_source'] ?? '', $r['reasonToJoin'] ?? $r['reason_to_join'] ?? '',
                 $docDriveUrl ?: null,
                 $fotoUrl ?: null,

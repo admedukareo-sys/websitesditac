@@ -113,7 +113,10 @@ export default function RegistrationCardModal({ isOpen, onClose, user, registrat
               </div>
               <div>
                 <span className="text-slate-500 block text-[10px] uppercase font-bold">Asal Sekolah / TK</span>
-                <span className="font-semibold text-slate-800">{registration.previousSchool || '-'}</span>
+                <span className="font-semibold text-slate-800">
+                  {registration.previousSchool || '-'}
+                  {registration.schoolAddress ? ` • ${registration.schoolAddress}` : ''}
+                </span>
               </div>
               <div>
                 <span className="text-slate-500 block text-[10px] uppercase font-bold">No. HP Orang Tua</span>

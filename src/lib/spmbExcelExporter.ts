@@ -147,8 +147,8 @@ export function exportSpmbToExcel(
         <!-- Baris 1: Header Grup Kategori -->
         <tr>
           <th colspan="4" class="group-th" style="background-color: #065f46;">A. DATA REGISTRASI</th>
-          <th colspan="10" class="group-th" style="background-color: #047857;">B. BIODATA CALON SISWA</th>
-          <th colspan="5" class="group-th" style="background-color: #065f46;">C. DATA ORANG TUA / WALI</th>
+          <th colspan="12" class="group-th" style="background-color: #047857;">B. BIODATA CALON SISWA</th>
+          <th colspan="9" class="group-th" style="background-color: #065f46;">C. DATA ORANG TUA / WALI</th>
           <th colspan="8" class="group-th" style="background-color: #047857;">D. TAHAPAN & SELEKSI SPMB</th>
           <th colspan="3" class="group-th" style="background-color: #065f46;">E. STATUS & PEMBAYARAN</th>
           <th colspan="3" class="group-th" style="background-color: #047857;">F. DOKUMEN & FOTO</th>
@@ -169,12 +169,18 @@ export function exportSpmbToExcel(
           <th class="th-col" style="width: 110px;">Tempat Lahir</th>
           <th class="th-col" style="width: 100px;">Tanggal Lahir</th>
           <th class="th-col" style="width: 150px;">Asal Sekolah (TK/PAUD)</th>
+          <th class="th-col" style="width: 180px;">Alamat Sekolah Asal</th>
           <th class="th-col" style="width: 90px;">Program</th>
           <th class="th-col" style="width: 70px;">Ukuran Baju</th>
           <th class="th-col" style="width: 220px;">Alamat Rumah Lengkap</th>
+          <th class="th-col" style="width: 130px;">Jarak ke Sekolah</th>
           
           <th class="th-col" style="width: 140px;">Nama Ayah Kandung</th>
+          <th class="th-col" style="width: 130px;">Pekerjaan Ayah</th>
+          <th class="th-col" style="width: 130px;">Penghasilan Ayah</th>
           <th class="th-col" style="width: 140px;">Nama Ibu Kandung</th>
+          <th class="th-col" style="width: 130px;">Pekerjaan Ibu</th>
+          <th class="th-col" style="width: 130px;">Penghasilan Ibu</th>
           <th class="th-col" style="width: 120px;">No. WhatsApp / HP</th>
           <th class="th-col" style="width: 140px;">Email Akun Wali</th>
           <th class="th-col" style="width: 130px;">Nama Akun Pendaftar</th>
@@ -250,12 +256,18 @@ export function exportSpmbToExcel(
           <td>${r.birthPlace || '-'}</td>
           <td class="text-str text-center">${r.birthDate || '-'}</td>
           <td>${r.previousSchool || '-'}</td>
+          <td>${r.schoolAddress || '-'}</td>
           <td class="text-center font-bold">${r.programType || 'BOARDING'}</td>
           <td class="text-center">${r.uniformSize || '-'}</td>
           <td>${r.address || '-'}</td>
+          <td>${r.distanceToSchool || '-'}</td>
           
           <td>${r.fatherName || '-'}</td>
+          <td>${r.fatherOccupation || '-'}</td>
+          <td>${r.fatherIncome || '-'}</td>
           <td>${r.motherName || '-'}</td>
+          <td>${r.motherOccupation || '-'}</td>
+          <td>${r.motherIncome || '-'}</td>
           <td class="text-str">${waCell}</td>
           <td>${r.userEmail || '-'}</td>
           <td>${r.userName || '-'}</td>

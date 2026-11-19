@@ -158,6 +158,14 @@ export default function AdminRegistrations() {
   const [editInfoSource, setEditInfoSource] = useState('');
   const [editReasonToJoin, setEditReasonToJoin] = useState('');
   const [editSchool, setEditSchool] = useState('');
+  const [editSchoolAddress, setEditSchoolAddress] = useState('');
+  const [editDistanceToSchool, setEditDistanceToSchool] = useState('');
+  const [editFatherName, setEditFatherName] = useState('');
+  const [editFatherOccupation, setEditFatherOccupation] = useState('');
+  const [editFatherIncome, setEditFatherIncome] = useState('');
+  const [editMotherName, setEditMotherName] = useState('');
+  const [editMotherOccupation, setEditMotherOccupation] = useState('');
+  const [editMotherIncome, setEditMotherIncome] = useState('');
   const [editReason, setEditReason] = useState('');
 
   // SPMB Site Settings Quick Controls
@@ -260,10 +268,16 @@ export default function AdminRegistrations() {
             birthDate: r.birth_date || r.birthDate || '',
             gender: r.gender || 'L',
             address: r.address || '',
+            distanceToSchool: r.distance_to_school || r.distanceToSchool || '',
             fatherName: r.father_name || r.fatherName || '',
+            fatherOccupation: r.father_occupation || r.fatherOccupation || '',
+            fatherIncome: r.father_income || r.fatherIncome || '',
             motherName: r.mother_name || r.motherName || '',
+            motherOccupation: r.mother_occupation || r.motherOccupation || '',
+            motherIncome: r.mother_income || r.motherIncome || '',
             parentPhone: r.parent_phone || r.parentPhone || '',
             previousSchool: r.previous_school || r.previousSchool || '',
+            schoolAddress: r.school_address || r.schoolAddress || '',
             status: r.status || 'DRAFT',
             spmbStage: r.spmb_stage || r.spmbStage || 'PENDAFTARAN',
             stifinResult: r.stifin_result || r.stifinResult || '',
@@ -398,6 +412,14 @@ export default function AdminRegistrations() {
       infoSource: editInfoSource,
       reasonToJoin: editReasonToJoin,
       previousSchool: editSchool,
+      schoolAddress: editSchoolAddress,
+      distanceToSchool: editDistanceToSchool,
+      fatherName: editFatherName,
+      fatherOccupation: editFatherOccupation,
+      fatherIncome: editFatherIncome,
+      motherName: editMotherName,
+      motherOccupation: editMotherOccupation,
+      motherIncome: editMotherIncome,
       rejectionReason: editReason,
     };
     await api.saveRegistration(updates);
@@ -414,6 +436,14 @@ export default function AdminRegistrations() {
     setEditInfoSource(reg.infoSource || 'Instagram / Facebook Official');
     setEditReasonToJoin(reg.reasonToJoin || '');
     setEditSchool(reg.previousSchool || '');
+    setEditSchoolAddress(reg.schoolAddress || '');
+    setEditDistanceToSchool(reg.distanceToSchool || '');
+    setEditFatherName(reg.fatherName || '');
+    setEditFatherOccupation(reg.fatherOccupation || '');
+    setEditFatherIncome(reg.fatherIncome || '');
+    setEditMotherName(reg.motherName || '');
+    setEditMotherOccupation(reg.motherOccupation || '');
+    setEditMotherIncome(reg.motherIncome || '');
     setEditReason(reg.rejectionReason || '');
   };
 
@@ -949,9 +979,11 @@ export default function AdminRegistrations() {
           <tr><td class="label">Tempat, Tanggal Lahir</td><td class="colon">:</td><td class="val">${reg.birthPlace || '-'}, ${reg.birthDate || '-'}</td></tr>
           <tr><td class="label">Jenis Kelamin</td><td class="colon">:</td><td class="val">${reg.gender === 'P' ? 'Perempuan (P)' : 'Laki-laki (L)'}</td></tr>
           <tr><td class="label">Asal Sekolah TK/PAUD</td><td class="colon">:</td><td class="val">${reg.previousSchool || '-'}</td></tr>
+          <tr><td class="label">Alamat Sekolah Asal</td><td class="colon">:</td><td class="val">${reg.schoolAddress || '-'}</td></tr>
           <tr><td class="label">Pilihan Program</td><td class="colon">:</td><td class="val">${reg.programType || 'BOARDING'}</td></tr>
           <tr><td class="label">Ukuran Seragam</td><td class="colon">:</td><td class="val">${reg.uniformSize || '-'}</td></tr>
           <tr><td class="label">Alamat Rumah</td><td class="colon">:</td><td class="val">${reg.address || '-'}</td></tr>
+          <tr><td class="label">Jarak Rumah ke Sekolah</td><td class="colon">:</td><td class="val">${reg.distanceToSchool || '-'}</td></tr>
         </table>
 
         <div style="clear: both;"></div>
@@ -959,7 +991,11 @@ export default function AdminRegistrations() {
         <div class="section-title">B. DATA ORANG TUA / WALI</div>
         <table class="biodata">
           <tr><td class="label">Nama Ayah Kandung</td><td class="colon">:</td><td class="val">${reg.fatherName || '-'}</td></tr>
+          <tr><td class="label">Pekerjaan Ayah</td><td class="colon">:</td><td class="val">${reg.fatherOccupation || '-'}</td></tr>
+          <tr><td class="label">Penghasilan Ayah / Bulan</td><td class="colon">:</td><td class="val">${reg.fatherIncome || '-'}</td></tr>
           <tr><td class="label">Nama Ibu Kandung</td><td class="colon">:</td><td class="val">${reg.motherName || '-'}</td></tr>
+          <tr><td class="label">Pekerjaan Ibu</td><td class="colon">:</td><td class="val">${reg.motherOccupation || '-'}</td></tr>
+          <tr><td class="label">Penghasilan Ibu / Bulan</td><td class="colon">:</td><td class="val">${reg.motherIncome || '-'}</td></tr>
           <tr><td class="label">No. Telepon / WhatsApp</td><td class="colon">:</td><td class="val"><strong>${reg.parentPhone || '-'}</strong></td></tr>
           <tr><td class="label">Akun Email Wali</td><td class="colon">:</td><td class="val">${reg.userEmail || '-'}</td></tr>
         </table>
@@ -2210,6 +2246,11 @@ export default function AdminRegistrations() {
                       </div>
 
                       <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                        <span className="text-slate-400 block text-[10px] font-bold uppercase mb-1">Alamat Sekolah Asal</span>
+                        <span className="text-slate-900 text-xs font-semibold">{studentDetailReg.schoolAddress || '-'}</span>
+                      </div>
+
+                      <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
                         <span className="text-slate-400 block text-[10px] font-bold uppercase mb-1">Pilihan Program Sekolah</span>
                         <span className="inline-block px-2.5 py-0.5 rounded-md bg-amber-100 text-amber-900 font-bold text-xs">
                           {studentDetailReg.programType || 'BOARDING'}
@@ -2222,14 +2263,23 @@ export default function AdminRegistrations() {
                       </div>
                     </div>
 
-                    <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
-                      <span className="text-slate-400 block text-[10px] font-bold uppercase mb-1 flex items-center gap-1">
-                        <MapPin size={12} className="text-slate-500" />
-                        <span>Alamat Lengkap Tempat Tinggal</span>
-                      </span>
-                      <p className="text-slate-800 text-xs font-medium leading-relaxed">
-                        {studentDetailReg.address || 'Alamat belum diisi oleh wali pendaftar.'}
-                      </p>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+                      <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 md:col-span-2">
+                        <span className="text-slate-400 block text-[10px] font-bold uppercase mb-1 flex items-center gap-1">
+                          <MapPin size={12} className="text-slate-500" />
+                          <span>Alamat Lengkap Tempat Tinggal</span>
+                        </span>
+                        <p className="text-slate-800 text-xs font-medium leading-relaxed">
+                          {studentDetailReg.address || 'Alamat belum diisi oleh wali pendaftar.'}
+                        </p>
+                      </div>
+
+                      <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                        <span className="text-slate-400 block text-[10px] font-bold uppercase mb-1">Jarak Rumah ke Sekolah</span>
+                        <span className="inline-block px-2.5 py-0.5 rounded-md bg-emerald-100 text-emerald-900 font-bold text-xs">
+                          {studentDetailReg.distanceToSchool || '-'}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 )}
@@ -2238,14 +2288,42 @@ export default function AdminRegistrations() {
                 {detailActiveTab === 'PARENTS' && (
                   <div className="space-y-4 animate-fadeIn">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-                      <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
-                        <span className="text-slate-400 block text-[10px] font-bold uppercase mb-1">Nama Ayah Kandung</span>
-                        <span className="text-slate-900 text-sm font-extrabold">{studentDetailReg.fatherName || '-'}</span>
+                      {/* Box Ayah */}
+                      <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
+                        <span className="text-emerald-700 block text-[11px] font-bold uppercase pb-1 border-b border-slate-200">
+                          Data Ayah Kandung
+                        </span>
+                        <div>
+                          <span className="text-slate-400 block text-[10px] font-bold uppercase">Nama Lengkap</span>
+                          <span className="text-slate-900 text-sm font-extrabold">{studentDetailReg.fatherName || '-'}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400 block text-[10px] font-bold uppercase">Pekerjaan</span>
+                          <span className="text-slate-800 text-xs font-semibold">{studentDetailReg.fatherOccupation || '-'}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400 block text-[10px] font-bold uppercase">Penghasilan / Bulan</span>
+                          <span className="text-slate-800 text-xs font-semibold">{studentDetailReg.fatherIncome || '-'}</span>
+                        </div>
                       </div>
 
-                      <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
-                        <span className="text-slate-400 block text-[10px] font-bold uppercase mb-1">Nama Ibu Kandung</span>
-                        <span className="text-slate-900 text-sm font-extrabold">{studentDetailReg.motherName || '-'}</span>
+                      {/* Box Ibu */}
+                      <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
+                        <span className="text-teal-700 block text-[11px] font-bold uppercase pb-1 border-b border-slate-200">
+                          Data Ibu Kandung
+                        </span>
+                        <div>
+                          <span className="text-slate-400 block text-[10px] font-bold uppercase">Nama Lengkap</span>
+                          <span className="text-slate-900 text-sm font-extrabold">{studentDetailReg.motherName || '-'}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400 block text-[10px] font-bold uppercase">Pekerjaan</span>
+                          <span className="text-slate-800 text-xs font-semibold">{studentDetailReg.motherOccupation || '-'}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400 block text-[10px] font-bold uppercase">Penghasilan / Bulan</span>
+                          <span className="text-slate-800 text-xs font-semibold">{studentDetailReg.motherIncome || '-'}</span>
+                        </div>
                       </div>
 
                       <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 md:col-span-2">
@@ -2778,14 +2856,107 @@ export default function AdminRegistrations() {
                 ></textarea>
               </div>
 
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-slate-700 font-bold mb-1">Asal Sekolah (TK/PAUD)</label>
+                  <input 
+                    type="text" 
+                    value={editSchool}
+                    onChange={(e) => setEditSchool(e.target.value)}
+                    placeholder="Nama TK / RA Asal"
+                    className="w-full px-3 py-2 border rounded-xl outline-none focus:border-emerald-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-700 font-bold mb-1">Alamat Sekolah Asal</label>
+                  <input 
+                    type="text" 
+                    value={editSchoolAddress}
+                    onChange={(e) => setEditSchoolAddress(e.target.value)}
+                    placeholder="Alamat TK / RA Asal"
+                    className="w-full px-3 py-2 border rounded-xl outline-none focus:border-emerald-500"
+                  />
+                </div>
+              </div>
+
               <div>
-                <label className="block text-slate-700 font-bold mb-1">Asal Sekolah</label>
+                <label className="block text-slate-700 font-bold mb-1">Jarak Rumah ke Sekolah</label>
                 <input 
                   type="text" 
-                  value={editSchool}
-                  onChange={(e) => setEditSchool(e.target.value)}
+                  value={editDistanceToSchool}
+                  onChange={(e) => setEditDistanceToSchool(e.target.value)}
+                  placeholder="Contoh: 1 – 3 km / Kurang dari 1 km"
                   className="w-full px-3 py-2 border rounded-xl outline-none focus:border-emerald-500"
                 />
+              </div>
+
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                <span className="text-emerald-800 font-bold block text-xs border-b border-slate-200 pb-1">
+                  Data Orang Tua (Ayah & Ibu)
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <div>
+                    <label className="block text-slate-600 font-medium mb-1 text-[11px]">Nama Ayah</label>
+                    <input 
+                      type="text" 
+                      value={editFatherName}
+                      onChange={(e) => setEditFatherName(e.target.value)}
+                      className="w-full px-2.5 py-1.5 border rounded-lg text-xs"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-slate-600 font-medium mb-1 text-[11px]">Pekerjaan Ayah</label>
+                    <input 
+                      type="text" 
+                      value={editFatherOccupation}
+                      onChange={(e) => setEditFatherOccupation(e.target.value)}
+                      placeholder="Pekerjaan Ayah"
+                      className="w-full px-2.5 py-1.5 border rounded-lg text-xs"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-slate-600 font-medium mb-1 text-[11px]">Penghasilan Ayah</label>
+                    <input 
+                      type="text" 
+                      value={editFatherIncome}
+                      onChange={(e) => setEditFatherIncome(e.target.value)}
+                      placeholder="Penghasilan Ayah"
+                      className="w-full px-2.5 py-1.5 border rounded-lg text-xs"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <div>
+                    <label className="block text-slate-600 font-medium mb-1 text-[11px]">Nama Ibu</label>
+                    <input 
+                      type="text" 
+                      value={editMotherName}
+                      onChange={(e) => setEditMotherName(e.target.value)}
+                      className="w-full px-2.5 py-1.5 border rounded-lg text-xs"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-slate-600 font-medium mb-1 text-[11px]">Pekerjaan Ibu</label>
+                    <input 
+                      type="text" 
+                      value={editMotherOccupation}
+                      onChange={(e) => setEditMotherOccupation(e.target.value)}
+                      placeholder="Pekerjaan Ibu"
+                      className="w-full px-2.5 py-1.5 border rounded-lg text-xs"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-slate-600 font-medium mb-1 text-[11px]">Penghasilan Ibu</label>
+                    <input 
+                      type="text" 
+                      value={editMotherIncome}
+                      onChange={(e) => setEditMotherIncome(e.target.value)}
+                      placeholder="Penghasilan Ibu"
+                      className="w-full px-2.5 py-1.5 border rounded-lg text-xs"
+                    />
+                  </div>
+                </div>
               </div>
 
               <div>

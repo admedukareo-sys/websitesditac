@@ -91,10 +91,16 @@ export interface Registration {
   birthDate?: string;
   gender?: string;
   address?: string;
+  distanceToSchool?: string;
   fatherName?: string;
+  fatherOccupation?: string;
+  fatherIncome?: string;
   motherName?: string;
+  motherOccupation?: string;
+  motherIncome?: string;
   parentPhone?: string;
   previousSchool?: string;
+  schoolAddress?: string;
   status: 'DRAFT' | 'SUBMITTED' | 'VERIFIED' | 'REJECTED' | 'PASSED' | 'FAILED' | 'REGISTERED';
   spmbStage?: SpmbStage;
   stifinResult?: string;
@@ -1580,10 +1586,16 @@ export async function syncWithBackend() {
         birthDate: r.birth_date || r.birthDate || '',
         gender: r.gender || 'L',
         address: r.address || '',
+        distanceToSchool: r.distance_to_school || r.distanceToSchool || '',
         fatherName: r.father_name || r.fatherName || '',
+        fatherOccupation: r.father_occupation || r.fatherOccupation || '',
+        fatherIncome: r.father_income || r.fatherIncome || '',
         motherName: r.mother_name || r.motherName || '',
+        motherOccupation: r.mother_occupation || r.motherOccupation || '',
+        motherIncome: r.mother_income || r.motherIncome || '',
         parentPhone: r.parent_phone || r.parentPhone || '',
         previousSchool: r.previous_school || r.previousSchool || '',
+        schoolAddress: r.school_address || r.schoolAddress || '',
         status: r.status || 'DRAFT',
         spmbStage: r.spmb_stage || r.spmbStage || 'PENDAFTARAN',
         stifinResult: r.stifin_result || r.stifinResult || '',
